@@ -75,8 +75,8 @@ class ApiWorker:
             else:
                 top_cities = 'Not found'
             if i == 0:
-                print('City:\n{} or {} or {}'.format(top_cities[0], top_cities[1], top_cities[2]))
+                print('City:\n{} or {} or {}'.format(top_cities[0][0] + ' : ' + top_cities[0][1], top_cities[1][0] + ' : ' + top_cities[1][1], top_cities[2][0] + ' : ' + top_cities[2][1]))
             elif i == 1:
-                print('School:\n{} or {} or {}'.format(top_cities[0], top_cities[1], top_cities[2]))
+                print('School:\n{} or {} or {}'.format(top_cities[0][0] + ' : ' + top_cities[0][1], top_cities[1][0] + ' : ' + top_cities[1][1], top_cities[2][0] + ' : ' + top_cities[2][1]))
             elif i == 2:
-                print('University:\n{} or {} or {}'.format(top_cities[0], top_cities[1], top_cities[2]))
+                print('University:\n{} or {} or {}'.format(top_cities[0][0] + ' : ' + top_cities[0][1], top_cities[1][0] + ' : ' + top_cities[1][1], top_cities[2][0] + ' : ' + top_cities[2][1]))
