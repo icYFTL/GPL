@@ -1,5 +1,6 @@
 import vk_api
 import time
+import operator
 
 from collections import Counter
 
@@ -48,8 +49,34 @@ class ApiWorker:
                     univers.append(univer)
             except:
                 pass
-        city_count = Counter(cities)
-        schools_count = Counter(schools)
-        univers_count = Counter(univers)
+        data = [Counter(cities), Counter(schools), Counter(univers)]
+        top_cities = [None] * 3
+        for i in range(len(data)):
+            if len(data[0]) > 2:
+                top_cities[0] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-1]).replace('(', '').replace(')', '').split(',')
+                top_cities[1] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-2]).replace('(',
+                                                                                                            '').replace(
+                    ')', '').split(',')
+                top_cities[2] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-3]).replace('(',
+                                                                                                            '').replace(
+                    ')', '').split(',')
+            elif len(data[0]) > 1:
+                top_cities[0] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-1]).replace('(',
+                                                                                                           '').replace(
+                    ')', '').split(',')
+                top_cities[1] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-2]).replace('(',
+                                                                                                           '').replace(
+                    ')', '').split(',')
+            elif len(data[0]) == 1:
+                top_cities[0] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-1]).replace('(',
+                                                                                                           '').replace(
+                    ')', '').split(',')
 
-        return [city_count, schools_count, univers_count]
+            else:
+                top_cities = 'Not found'
+            if i == 0:
+                print('City:\n{} or {} or {}'.format(top_cities[0], top_cities[1], top_cities[2]))
+            elif i == 1:
+                print('School:\n{} or {} or {}'.format(top_cities[0], top_cities[1], top_cities[2]))
+            elif i == 2:
+                print('University:\n{} or {} or {}'.format(top_cities[0], top_cities[1], top_cities[2]))
