@@ -30,11 +30,13 @@ class ApiWorker:
         cities = []
         schools = []
         univers = []
+        counter = 0
         users = self.get_friends()
         for user in users:
             user_info = self.session.method('users.get', {'user_ids': user, 'fields': 'city,schools,education'})
             time.sleep(0.4)
-            print(user_info)
+            counter += 1
+            print('Users handled {}/{}'.format(str(counter), str(len(users))))
             try:
                 cities.append(user_info[0].get('city').get('title'))
             except:
@@ -53,12 +55,14 @@ class ApiWorker:
         top_cities = [None] * 3
         for i in range(len(data)):
             if len(data[0]) > 2:
-                top_cities[0] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-1]).replace('(', '').replace(')', '').split(',')
+                top_cities[0] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-1]).replace('(',
+                                                                                                           '').replace(
+                    ')', '').split(',')
                 top_cities[1] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-2]).replace('(',
-                                                                                                            '').replace(
+                                                                                                           '').replace(
                     ')', '').split(',')
                 top_cities[2] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-3]).replace('(',
-                                                                                                            '').replace(
+                                                                                                           '').replace(
                     ')', '').split(',')
             elif len(data[0]) > 1:
                 top_cities[0] = str(sorted(dict(data[i]).items(), key=operator.itemgetter(1))[-1]).replace('(',
@@ -74,9 +78,27 @@ class ApiWorker:
 
             else:
                 top_cities = 'Not found'
-            if i == 0:
-                print('City:\n{} or {} or {}'.format(top_cities[0][0] + ' : ' + top_cities[0][1], top_cities[1][0] + ' : ' + top_cities[1][1], top_cities[2][0] + ' : ' + top_cities[2][1]))
-            elif i == 1:
-                print('School:\n{} or {} or {}'.format(top_cities[0][0] + ' : ' + top_cities[0][1], top_cities[1][0] + ' : ' + top_cities[1][1], top_cities[2][0] + ' : ' + top_cities[2][1]))
-            elif i == 2:
-                print('University:\n{} or {} or {}'.format(top_cities[0][0] + ' : ' + top_cities[0][1], top_cities[1][0] + ' : ' + top_cities[1][1], top_cities[2][0] + ' : ' + top_cities[2][1]))
+
+            try:
+                if i == 0:
+                    print('\n\n\n')
+                    print('City:\n{} or {} or {}'.format(
+                        top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(cities)),
+                        top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(cities)),
+                        top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(cities))))
+                    print('\n')
+                elif i == 1:
+                    print('School:\n{} or {} or {}'.format(
+                        top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(schools)),
+                        top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(schools)),
+                        top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(schools))))
+                    print('\n')
+                elif i == 2:
+                    print(
+                        'University:\n{} or {} or {}'.format(
+                            top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(univers)),
+                            top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(univers)),
+                            top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(univers))))
+                    print('\n')
+            except:
+                pass
