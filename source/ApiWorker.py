@@ -82,20 +82,20 @@ class ApiWorker:
             try:
                 if i == 0:
                     print('\n\n\n')
-                    print('City:\n{} or {} or {}'.format(
+                    print('City:\n{}\n{}\n{}'.format(
                         top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(cities)),
                         top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(cities)),
                         top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(cities))))
-                    print('\n')
+                    print('\n\n')
                 elif i == 1:
-                    print('School:\n{} or {} or {}'.format(
+                    print('School:\n{}\n{}\n{}'.format(
                         top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(schools)),
                         top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(schools)),
                         top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(schools))))
-                    print('\n')
+                    print('\n\n')
                 elif i == 2:
                     print(
-                        'University:\n{} or {} or {}'.format(
+                        'University:\n{}\n{}\n{}'.format(
                             top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(univers)),
                             top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(univers)),
                             top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(univers))))

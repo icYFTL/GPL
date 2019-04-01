@@ -4,6 +4,11 @@ sys.path.append('./source')
 
 from ApiWorker import ApiWorker
 from InputWorker import InputWorker
+from Preview import Preview
+
+### PREVIEW ###
+Preview.do()
+
 
 ### INPUT ###
 
