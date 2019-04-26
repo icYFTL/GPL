@@ -1,14 +1,15 @@
 import sys
 import time
-from ConsoleWorker import ConsoleWorker
+from source.ConsoleWorker import ConsoleWorker
+from Config import Config
 
 
-class Preview(object):
-    def do():
-        CLSWork = ConsoleWorker()
-        CLSWork.ClearConsole()
-        print('[GPL] v1.1 Alpha Release')
-        corp = 'by icYFTL\n\n'
+class Preview:
+    @staticmethod
+    def preview():
+        ConsoleWorker.ClearConsole()
+        print('[{}] v{} Alpha Release'.format(Config.name, Config.version))
+        corp = 'by {}\n\n'.format(Config.author)
 
         for i in range(len(corp)):
             if corp[i].isalpha() or corp[i - 1].isalpha() and i != 0:

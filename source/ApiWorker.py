@@ -1,6 +1,7 @@
 import vk_api
 import time
 import operator
+import hues
 
 from collections import Counter
 
@@ -16,7 +17,7 @@ class ApiWorker:
         try:
             self.session = vk_api.VkApi(token=self.token)
         except:
-            print('Bad Access Token.')
+            hues.error('Bad Access Token.')
             exit()
 
     def get_friends(self):
@@ -32,11 +33,12 @@ class ApiWorker:
         univers = []
         counter = 0
         users = self.get_friends()
+        hues.success()
         for user in users:
             user_info = self.session.method('users.get', {'user_ids': user, 'fields': 'city,schools,education'})
             time.sleep(0.4)
             counter += 1
-            print('Users handled {}/{}'.format(str(counter), str(len(users))))
+            hues.log('Users handled {}/{}'.format(str(counter), str(len(users))))
             try:
                 cities.append(user_info[0].get('city').get('title'))
             except:

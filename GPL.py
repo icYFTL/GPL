@@ -1,22 +1,12 @@
-import sys
-
-sys.path.append('./source')
-
-from ApiWorker import ApiWorker
-from InputWorker import InputWorker
-from Preview import Preview
+from source.ApiWorker import ApiWorker
+from source.InputWorker import InputWorker
+from source.Preview import Preview
+from Config import Config
 
 ### PREVIEW ###
-Preview.do()
-
-
-### INPUT ###
-
-token = InputWorker.get_token()
-user_id = InputWorker.get_user_id()
+Preview.preview()
 
 ### APIWORKER ###
 
-apiworker = ApiWorker(token, user_id)
+apiworker = ApiWorker(Config.access_token, InputWorker.get_user_id())
 apiworker.get_info()
-
