@@ -3,10 +3,17 @@ from source.InputWorker import InputWorker
 from source.Preview import Preview
 from Config import Config
 
-### PREVIEW ###
+import hues
+
+# Preview
 Preview.preview()
 
-### APIWORKER ###
+# VK Working
 
-apiworker = ApiWorker(Config.access_token, InputWorker.get_user_id())
-apiworker.get_info()
+counter = 1
+users = InputWorker.get_user_id()
+for user in users:
+    hues.log('User with ID {} is handling now. ({}/{})'.format(user, str(counter), len(users)))
+    apiworker = ApiWorker(Config.access_token, user)
+    apiworker.get_info()
+    counter += 1

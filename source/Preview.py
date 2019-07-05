@@ -7,7 +7,7 @@ from Config import Config
 class Preview:
     @staticmethod
     def preview():
-        ConsoleWorker.ClearConsole()
+        ConsoleWorker.clear()
         print('[{}] v{} Alpha Release'.format(Config.name, Config.version))
         corp = 'by {}\n\n'.format(Config.author)
 

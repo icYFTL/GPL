@@ -4,6 +4,8 @@ import operator
 import hues
 
 from collections import Counter
+from source.StaticMethods import StaticMethods
+from Config import Config
 
 
 class ApiWorker:
@@ -11,7 +13,7 @@ class ApiWorker:
     def __init__(self, token, user_id):
         self.token = token
         self.user_id = user_id
-        self.session = ""
+        self.session = None
 
     def get_session(self):
         try:
@@ -27,6 +29,13 @@ class ApiWorker:
         except:
             return False
 
+    def save(self, data):
+        if not Config.save_results:
+            return
+        f = open('./{}.txt'.format(self.user_id), 'a')
+        f.write(data)
+        f.close()
+
     def get_info(self):
         cities = []
         schools = []
@@ -40,16 +49,16 @@ class ApiWorker:
             counter += 1
             hues.log('Users handled {}/{}'.format(str(counter), str(len(users))))
             try:
-                cities.append(user_info[0].get('city').get('title'))
+                cities.append(user_info[0].get('city').get('title')).replace(',', '')
             except:
                 pass
             try:
-                schools.append(user_info[0].get('schools')[-1].get('name'))
+                schools.append(user_info[0].get('schools')[-1].get('name')).replace(',', '')
             except:
                 pass
             try:
-                univer = user_info[0].get('university_name')
-                if univer != None and univer != '':
+                univer = user_info[0].get('university_name').replace(',', '')
+                if univer:
                     univers.append(univer)
             except:
                 pass
@@ -80,27 +89,47 @@ class ApiWorker:
 
             else:
                 top_cities = 'Not found'
-
+            print('\n\n\n')
             try:
                 if i == 0:
-                    print('\n\n\n')
-                    print('City:\n{}\n{}\n{}'.format(
-                        top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(cities)),
-                        top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(cities)),
-                        top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(cities))))
-                    print('\n\n')
+                    out = 'City:\n{}\n{}\n{}'.format(
+                        '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities))),
+                                                top_cities[0][1].strip(), str(len(cities))),
+                        '{}: {} ({}/{})'.format(top_cities[1][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities))),
+                                                top_cities[1][1].strip(), str(len(cities))),
+                        '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities))),
+                                                top_cities[2][1].strip(), str(len(cities))))
+                    print(out)
+                    self.save(out)
                 elif i == 1:
-                    print('School:\n{}\n{}\n{}'.format(
-                        top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(schools)),
-                        top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(schools)),
-                        top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(schools))))
-                    print('\n\n')
+                    out = '\n\nSchool:\n{}\n{}\n{}'.format(
+                        '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities))),
+                                                top_cities[0][1].strip(), str(len(cities))),
+                        '{}: {} ({}/{})'.format(top_cities[1][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities))),
+                                                top_cities[1][1].strip(), str(len(cities))),
+                        '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities))),
+                                                top_cities[2][1].strip(), str(len(cities))))
+                    print(out)
+                    self.save(out)
                 elif i == 2:
-                    print(
-                        'University:\n{}\n{}\n{}'.format(
-                            top_cities[0][0].replace('\'', '') + ' : ' + top_cities[0][1] + '/' + str(len(univers)),
-                            top_cities[1][0].replace('\'', '') + ' : ' + top_cities[1][1] + '/' + str(len(univers)),
-                            top_cities[2][0].replace('\'', '') + ' : ' + top_cities[2][1] + '/' + str(len(univers))))
+                    out = '\n\nUniversity:\n{}\n{}\n{}'.format(
+                        '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities))),
+                                                top_cities[0][1].strip(), str(len(cities))),
+                        '{}: {} ({}/{})'.format(top_cities[1][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities))),
+                                                top_cities[1][1].strip(), str(len(cities))),
+                        '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
+                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities))),
+                                                top_cities[2][1].strip(), str(len(cities))))
+                    print(out)
+                    self.save(out)
                     print('\n')
             except:
                 pass

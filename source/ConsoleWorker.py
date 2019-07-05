@@ -3,7 +3,6 @@ import os
 
 class ConsoleWorker:
     @staticmethod
-    def ClearConsole():
-        CLS = os.system('clear')
-        if CLS != 0:
-            CLS = os.system('cls')
+    def clear():
+        if os.system('clear') != 0:
+            os.system('cls')
