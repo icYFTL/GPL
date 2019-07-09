@@ -8,6 +8,6 @@ class InputWorker:
             f = open('./ids.txt', 'r')
             data = f.read().split('\n')
             f.close()
-            if input('Use ids from ids.txt? y/n: ') != 'n':
+            if input('Use ids from ids.txt? y/n: ') == 'y':
                 return data
-        return input('Give me the user ID: ')
+        return [input('Give me the user ID: ')]

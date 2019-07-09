@@ -47,7 +47,8 @@ class ApiWorker:
             user_info = self.session.method('users.get', {'user_ids': user, 'fields': 'city,schools,education'})
             time.sleep(0.4)
             counter += 1
-            hues.log('Users handled {}/{}'.format(str(counter), str(len(users))))
+            hues.log('Users handled {} ({}/{})'.format(StaticMethods.get_percentage(counter, len(users)), str(counter),
+                                                       str(len(users))))
             try:
                 cities.append(user_info[0].get('city').get('title')).replace(',', '')
             except:
@@ -94,39 +95,39 @@ class ApiWorker:
                 if i == 0:
                     out = 'City:\n{}\n{}\n{}'.format(
                         '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities))),
-                                                top_cities[0][1].strip(), str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities)), 3),
+                                                top_cities[0][1].strip(), str(len(cities)), 3),
                         '{}: {} ({}/{})'.format(top_cities[1][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities)), 3),
                                                 top_cities[1][1].strip(), str(len(cities))),
                         '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities)), 3),
                                                 top_cities[2][1].strip(), str(len(cities))))
                     print(out)
                     self.save(out)
                 elif i == 1:
                     out = '\n\nSchool:\n{}\n{}\n{}'.format(
                         '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities)), 3),
                                                 top_cities[0][1].strip(), str(len(cities))),
                         '{}: {} ({}/{})'.format(top_cities[1][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities)), 3),
                                                 top_cities[1][1].strip(), str(len(cities))),
                         '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities)), 3),
                                                 top_cities[2][1].strip(), str(len(cities))))
                     print(out)
                     self.save(out)
                 elif i == 2:
                     out = '\n\nUniversity:\n{}\n{}\n{}'.format(
                         '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[0][1], str(len(cities)), 3),
                                                 top_cities[0][1].strip(), str(len(cities))),
                         '{}: {} ({}/{})'.format(top_cities[1][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[1][1], str(len(cities)), 3),
                                                 top_cities[1][1].strip(), str(len(cities))),
                         '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
-                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities))),
+                                                StaticMethods.get_percentage(top_cities[2][1], str(len(cities)), 3),
                                                 top_cities[2][1].strip(), str(len(cities))))
                     print(out)
                     self.save(out)
