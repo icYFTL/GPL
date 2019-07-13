@@ -1,10 +1,13 @@
-import vk_api
-import time
 import operator
-
+import os
+import time
 from collections import Counter
-from source.StaticMethods import StaticMethods
+
+import vk_api
+
 from Config import Config
+from source.StaticData import StaticData
+from source.StaticMethods import StaticMethods
 
 
 class ApiWorker:
@@ -18,6 +21,7 @@ class ApiWorker:
         try:
             self.session = vk_api.VkApi(token=self.token)
         except:
+            StaticData.log.log(text='Bad access token.', type_s='error')
             exit()
 
     def get_friends(self):
@@ -30,21 +34,29 @@ class ApiWorker:
     def save(self, data):
         if not Config.save_results:
             return
-        f = open('./{}.txt'.format(self.user_id), 'a')
-        f.write(data)
+        try:
+            os.mkdir("./stdout/")
+        except FileExistsError:
+            pass
+        f = open('./stdout/{}.txt'.format(self.user_id), 'w', encoding='utf-8')
+        f.write(''.join(data))
         f.close()
 
     def get_info(self):
         cities = []
         schools = []
         univers = []
+        repl = []
         counter = 0
         users = self.get_friends()
-        print(users)
+        StaticData.log.log(text="Got user's friends.", type_s='success')
         for user in users:
             user_info = self.session.method('users.get', {'user_ids': user, 'fields': 'city,schools,education'})
             time.sleep(0.4)
             counter += 1
+            StaticData.log.log(
+                'Users handled {} ({}/{})'.format(StaticMethods.get_percentage(counter, len(users)), str(counter),
+                                                  str(len(users))), type_s='log_w')
             try:
                 cities.append(user_info[0].get('city').get('title')).replace(',', '')
             except:
@@ -86,10 +98,9 @@ class ApiWorker:
 
             else:
                 top_cities = 'Not found'
-            print('\n\n\n')
             try:
                 if i == 0:
-                    out = 'City:\n{}\n{}\n{}'.format(
+                    repl.append('\nCity:\n{}\n{}\n{}'.format(
                         '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
                                                 StaticMethods.get_percentage(top_cities[0][1], str(len(cities)), 3),
                                                 top_cities[0][1].strip(), str(len(cities)), 3),
@@ -98,11 +109,9 @@ class ApiWorker:
                                                 top_cities[1][1].strip(), str(len(cities))),
                         '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
                                                 StaticMethods.get_percentage(top_cities[2][1], str(len(cities)), 3),
-                                                top_cities[2][1].strip(), str(len(cities))))
-                    print(out)
-                    self.save(out)
+                                                top_cities[2][1].strip(), str(len(cities)))))
                 elif i == 1:
-                    out = '\n\nSchool:\n{}\n{}\n{}'.format(
+                    repl.append('\n\nSchool:\n{}\n{}\n{}'.format(
                         '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
                                                 StaticMethods.get_percentage(top_cities[0][1], str(len(cities)), 3),
                                                 top_cities[0][1].strip(), str(len(cities))),
@@ -111,11 +120,9 @@ class ApiWorker:
                                                 top_cities[1][1].strip(), str(len(cities))),
                         '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
                                                 StaticMethods.get_percentage(top_cities[2][1], str(len(cities)), 3),
-                                                top_cities[2][1].strip(), str(len(cities))))
-                    print(out)
-                    self.save(out)
+                                                top_cities[2][1].strip(), str(len(cities)))))
                 elif i == 2:
-                    out = '\n\nUniversity:\n{}\n{}\n{}'.format(
+                    repl.append('\n\nUniversity:\n{}\n{}\n{}'.format(
                         '{}: {} ({}/{})'.format(top_cities[0][0].replace('\'', ''),
                                                 StaticMethods.get_percentage(top_cities[0][1], str(len(cities)), 3),
                                                 top_cities[0][1].strip(), str(len(cities))),
@@ -124,9 +131,11 @@ class ApiWorker:
                                                 top_cities[1][1].strip(), str(len(cities))),
                         '{}: {} ({}/{})'.format(top_cities[2][0].replace('\'', ''),
                                                 StaticMethods.get_percentage(top_cities[2][1], str(len(cities)), 3),
-                                                top_cities[2][1].strip(), str(len(cities))))
-                    print(out)
-                    self.save(out)
-                    print('\n')
+                                                top_cities[2][1].strip(), str(len(cities)))))
+                    self.save(repl)
+                    if not Config.module_mod:
+                        StaticData.log.log(text=' '.join(repl), type_s='success_w')
+                    StaticData.log.log(text='\n', type_s='print')
+                    StaticData.log.log(text='User with ID {} handled.'.format(self.user_id), type_s='success')
             except:
                 pass

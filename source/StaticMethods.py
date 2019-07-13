@@ -1,3 +1,8 @@
+from datetime import datetime
+
+import pytz
+
+
 class StaticMethods:
     @staticmethod
     def get_percentage(a, b, digits=0):
@@ -6,3 +11,7 @@ class StaticMethods:
     @staticmethod
     def to_fixed(numObj, digits=0):
         return f"{numObj:.{digits}f}"
+
+    @staticmethod
+    def get_time():
+        return datetime.now(pytz.timezone('Europe/Moscow'))

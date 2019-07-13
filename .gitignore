@@ -27,6 +27,8 @@ MANIFEST
 data.txt
 .idea/
 ids.txt
+stdout/
+logs/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
