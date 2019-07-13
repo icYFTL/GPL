@@ -6,4 +6,5 @@ class Config:
 
     # COULD BE CHANGED
     user_vk_access_token = ''
-    save_results = True
+    save_results = False
+    module_mod = True

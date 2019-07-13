@@ -1,7 +1,6 @@
 import vk_api
 import time
 import operator
-import hues
 
 from collections import Counter
 from source.StaticMethods import StaticMethods
@@ -19,7 +18,6 @@ class ApiWorker:
         try:
             self.session = vk_api.VkApi(token=self.token)
         except:
-            hues.error('Bad Access Token.')
             exit()
 
     def get_friends(self):
@@ -42,13 +40,11 @@ class ApiWorker:
         univers = []
         counter = 0
         users = self.get_friends()
-        hues.success()
+        print(users)
         for user in users:
             user_info = self.session.method('users.get', {'user_ids': user, 'fields': 'city,schools,education'})
             time.sleep(0.4)
             counter += 1
-            hues.log('Users handled {} ({}/{})'.format(StaticMethods.get_percentage(counter, len(users)), str(counter),
-                                                       str(len(users))))
             try:
                 cities.append(user_info[0].get('city').get('title')).replace(',', '')
             except:
