@@ -10,8 +10,7 @@ Token is string which length is 85 symbols.
 It begins from `"access_token="` ***(without '=')*** to `&`     
 
 ***From version 1.4 You can use this script in yours by importing GPL.py.
-Don't forget set module_mod = True in Config.py
-***
+Don't forget set module_mod = True in Config.py***
 
 That's all what I have to say.
 
