@@ -1,6 +1,6 @@
 from Config import Config
-from source.ApiWorker import ApiWorker
 from source.DataChecker import DataChecker
+from source.DataHandler import DataHandler
 from source.InputWorker import InputWorker
 from source.StaticData import StaticData
 
@@ -19,6 +19,8 @@ class Main:
         for user in user_id:
             StaticData.log.log('User with ID {} is handling now. ({}/{})'.format(user, str(counter), len(user_id)),
                                type_s='log')
-            apiworker = ApiWorker(Config.user_vk_access_token, user)
-            apiworker.get_info()
+            DH = DataHandler(user_id)
+            if Config.module_mod:
+                return DH.handler()
+            DH.handler()
             counter += 1

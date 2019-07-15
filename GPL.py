@@ -22,8 +22,7 @@ class GPL:
         except IndexError:
             if Config.module_mod:
                 Config.user_vk_access_token = args['access']
-                Main.init(user_id=args)
-                return
+                return Main.init(user_id=args['user_id'])
             Preview.preview()
             Main.init()
         except:
