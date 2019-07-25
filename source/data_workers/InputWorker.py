@@ -1,4 +1,9 @@
 import os
+import re
+
+import hues
+
+from source.vk_api.UserAPI import UserAPI
 
 
 class InputWorker:
@@ -10,7 +15,14 @@ class InputWorker:
             f.close()
             if input('Use ids from ids.txt? y/n: ') == 'y':
                 return data
-        return [input('Give me the user ID: ')]
+        while True:
+            data = input('Give me the user\'s VK URL: ').strip()
+            if not re.findall('https://vk.com/[a-z0-9_]+/?', data):
+                hues.error("Bad URL")
+                continue
+            break
+
+        return [UserAPI.get_id_from_url(data)]
 
     @staticmethod
     def sys_argv_resolver(args):

@@ -1,8 +1,7 @@
-from Config import Config
-from source.DataChecker import DataChecker
-from source.DataHandler import DataHandler
-from source.InputWorker import InputWorker
-from source.StaticData import StaticData
+from source.data_workers.DataChecker import DataChecker
+from source.data_workers.DataHandler import DataHandler
+from source.data_workers.InputWorker import InputWorker
+from source.static.StaticData import StaticData
 
 
 class Main:
@@ -19,8 +18,6 @@ class Main:
         for user in user_id:
             StaticData.log.log('User with ID {} is handling now. ({}/{})'.format(user, str(counter), len(user_id)),
                                type_s='log')
-            DH = DataHandler(user_id)
-            if Config.module_mod:
-                return DH.handler()
+            DH = DataHandler(user)
             DH.handler()
             counter += 1

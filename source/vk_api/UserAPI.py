@@ -1,7 +1,7 @@
 import vk_api
 
 from Config import Config
-from source.StaticData import StaticData
+from source.static.StaticData import StaticData
 
 
 class UserAPI:
@@ -26,3 +26,12 @@ class UserAPI:
 
     def get_info(self, user_id):
         return self.vk.method('users.get', {'user_ids': user_id, 'fields': 'city,schools,education'})
+
+    @staticmethod
+    def get_id_from_url(url):
+        try:
+            url = url.replace("https://vk.com/", "").replace("/", "")
+            vk = vk_api.VkApi(token=Config.user_vk_access_token)
+            return vk.method("users.get", {"user_ids": url})[0]['id']
+        except:
+            return False

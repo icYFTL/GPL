@@ -1,10 +1,10 @@
 import sys
 
 from Config import Config
-from source.InputWorker import InputWorker
-from source.Main import Main
-from source.Preview import Preview
-from source.StaticData import StaticData
+from source.console.Preview import Preview
+from source.data_workers.InputWorker import InputWorker
+from source.main.Main import Main
+from source.static.StaticData import StaticData
 
 
 class GPL:
@@ -20,9 +20,6 @@ class GPL:
                     StaticData.log.log(text="Bad args.", type_s='error')
                     exit()
         except IndexError:
-            if Config.module_mod:
-                Config.user_vk_access_token = args['access']
-                return Main.init(user_id=args['user_id'])
             Preview.preview()
             Main.init()
         except:
@@ -30,5 +27,5 @@ class GPL:
             exit()
 
 
-if not Config.module_mod:
+if __name__ == '__main__':
     GPL.main()

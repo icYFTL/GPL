@@ -4,9 +4,9 @@ import time
 from collections import Counter
 
 from Config import Config
-from source.StaticData import StaticData
-from source.StaticMethods import StaticMethods
-from source.UserAPI import UserAPI
+from source.static.StaticData import StaticData
+from source.static.StaticMethods import StaticMethods
+from source.vk_api.UserAPI import UserAPI
 
 
 class DataHandler:
@@ -30,21 +30,30 @@ class DataHandler:
         f.close()
 
     def cities_handler(self, data):
-        city = data['city']['title'].replace(',', '')
-        if city:
-            self.cities.append(city)
+        try:
+            city = data['city']['title'].replace(',', '')
+            if city:
+                self.cities.append(city)
+        except:
+            pass
         self.schools_handler(data)
 
     def schools_handler(self, data):
-        school = data['schools'][-1]['name'].replace(',', '')
-        if school:
-            self.schools.append(school)
+        try:
+            school = data['schools'][-1]['name'].replace(',', '')
+            if school:
+                self.schools.append(school)
+        except:
+            pass
         self.univers_handler(data)
 
     def univers_handler(self, data):
-        univer = data['university_name'].replace(',', '')
-        if univer:
-            self.univers.append(univer)
+        try:
+            univer = data['university_name'].replace(',', '')
+            if univer:
+                self.univers.append(univer)
+        except:
+            pass
 
     def post_handler(self, data):
         for i in range(len(data)):
@@ -77,7 +86,7 @@ class DataHandler:
                 self.repl.append("Не найдено")
                 self.repl.append("Не найдено")
 
-    def reply_contruct(self, data):
+    def reply_contruct(self):
         repl = []
         current = ["City", self.cities]
         for i in range(0, 9, 3):
@@ -86,25 +95,27 @@ class DataHandler:
             if i == 6:
                 current = ["University", self.univers]
             try:
-                repl.append('\n{}:\n{}\n{}\n{}'.format(current[0],
-                                                       '1. {}: {} ({}/{})'.format(self.repl[i][0].replace('\'', ''),
-                                                                                  StaticMethods.get_percentage(
-                                                                                      self.repl[i][1],
-                                                                                      str(len(current[1])), 3),
-                                                                                  self.repl[i][1].strip(),
-                                                                                  str(len(current[1])), 3),
-                                                       '2. {}: {} ({}/{})'.format(self.repl[i + 1][0].replace('\'', ''),
-                                                                                  StaticMethods.get_percentage(
-                                                                                      self.repl[i + 1][1],
-                                                                                      str(len(current[1])), 3),
-                                                                                  self.repl[i + 1][1].strip(),
-                                                                                  str(len(current[1]))),
-                                                       '3. {}: {} ({}/{})'.format(self.repl[i + 2][0].replace('\'', ''),
-                                                                                  StaticMethods.get_percentage(
-                                                                                      self.repl[i + 2][1],
-                                                                                      str(len(current[1])), 3),
-                                                                                  self.repl[i + 2][1].strip(),
-                                                                                  str(len(current[1])))))
+                repl.append('\n{}:\n{}\n{}\n{}\n'.format(current[0],
+                                                         '1. {}: {} ({}/{})'.format(self.repl[i][0].replace('\'', ''),
+                                                                                    StaticMethods.get_percentage(
+                                                                                        self.repl[i][1],
+                                                                                        str(len(current[1])), 3),
+                                                                                    self.repl[i][1].strip(),
+                                                                                    str(len(current[1])), 3),
+                                                         '2. {}: {} ({}/{})'.format(
+                                                             self.repl[i + 1][0].replace('\'', ''),
+                                                             StaticMethods.get_percentage(
+                                                                 self.repl[i + 1][1],
+                                                                 str(len(current[1])), 3),
+                                                             self.repl[i + 1][1].strip(),
+                                                             str(len(current[1]))),
+                                                         '3. {}: {} ({}/{})'.format(
+                                                             self.repl[i + 2][0].replace('\'', ''),
+                                                             StaticMethods.get_percentage(
+                                                                 self.repl[i + 2][1],
+                                                                 str(len(current[1])), 3),
+                                                             self.repl[i + 2][1].strip(),
+                                                             str(len(current[1])))))
             except:
                 return False
 
@@ -122,19 +133,14 @@ class DataHandler:
                 'Users handling {} ({}/{})'.format(StaticMethods.get_percentage(counter, len(users)), str(counter),
                                                    str(len(users))), type_s='log_w')
             StaticData.percent = StaticMethods.get_percentage(counter, len(users))
-            try:
-                self.cities_handler(user_info[0])
-            except:
-                return False
+            self.cities_handler(user_info[0])
 
         data = [Counter(self.cities), Counter(self.schools), Counter(self.univers)]
 
         self.post_handler(data)
-        out = self.reply_contruct(data)
+        out = self.reply_contruct()
         self.save(out)
 
-        if not Config.module_mod:
-            StaticData.log.log(text=' '.join(out), type_s='success_w')
         StaticData.log.log(text='\n', type_s='print')
         StaticData.log.log(text='User with ID {} handled.'.format(self.user_id), type_s='success')
-        return out
+        print(''.join(out))

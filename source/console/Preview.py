@@ -1,15 +1,16 @@
 import sys
 import time
-from source.ConsoleWorker import ConsoleWorker
-from Config import Config
+
+from source.console.ConsoleWorker import ConsoleWorker
+from source.static.StaticData import StaticData
 
 
 class Preview:
     @staticmethod
     def preview():
         ConsoleWorker.clear()
-        print('[{}] v{} Alpha Release'.format(Config.name, Config.version))
-        corp = 'by {}\n\n'.format(Config.author)
+        print('[{}] v{} Alpha Release'.format(StaticData.name, StaticData.version))
+        corp = 'by {}\n\n'.format(StaticData.author)
 
         for i in range(len(corp)):
             if corp[i].isalpha() or corp[i - 1].isalpha() and i != 0:
