@@ -4,7 +4,7 @@ import time
 from collections import Counter
 
 from Config import Config
-from source.static.StaticData import StaticData
+from source.logger.LogWork import LogWork
 from source.static.StaticMethods import StaticMethods
 from source.vk_api.UserAPI import UserAPI
 
@@ -15,7 +15,7 @@ class DataHandler:
         self.vk = UserAPI(user_id=self.user_id)
         self.cities = []
         self.schools = []
-        self.univers = []
+        self.high_schools = []
         self.repl = []
 
     def save(self, data):
@@ -25,7 +25,7 @@ class DataHandler:
             os.mkdir("./stdout/")
         except FileExistsError:
             pass
-        f = open('./stdout/{}.txt'.format(self.user_id), 'w', encoding='utf-8')
+        f = open(f'./stdout/{self.user_id}.txt', 'w', encoding='utf-8')
         f.write(''.join(data))
         f.close()
 
@@ -49,9 +49,9 @@ class DataHandler:
 
     def univers_handler(self, data):
         try:
-            univer = data['university_name'].replace(',', '')
+            univer = data['university_name'].replace(',', '').replace('\r\n', '')
             if univer:
-                self.univers.append(univer)
+                self.high_schools.append(univer)
         except:
             pass
 
@@ -93,7 +93,7 @@ class DataHandler:
             if i == 3:
                 current = ["School", self.schools]
             if i == 6:
-                current = ["University", self.univers]
+                current = ["University", self.high_schools]
             try:
                 repl.append('\n{}:\n{}\n{}\n{}\n'.format(current[0],
                                                          '1. {}: {} ({}/{})'.format(self.repl[i][0].replace('\'', ''),
@@ -122,25 +122,26 @@ class DataHandler:
         return repl
 
     def handler(self):
-        counter = 0
         users = self.vk.get_friends()
-        StaticData.log.log(text="Got user's friends.", type_s='success')
-        for user in users:
-            user_info = self.vk.get_info(user)
-            time.sleep(0.4)
-            counter += 1
-            StaticData.log.log(
-                'Users handling {} ({}/{})'.format(StaticMethods.get_percentage(counter, len(users)), str(counter),
-                                                   str(len(users))), type_s='log_w')
-            StaticData.percent = StaticMethods.get_percentage(counter, len(users))
-            self.cities_handler(user_info[0])
+        LogWork.log("Got user's friends")
+        users_info = []
+        if len(users) > 1000:
+            while len(users) > 0:
+                users_info.append(self.vk.get_info(users[:1000]))
+                del (users[:1000])
+                time.sleep(0.4)
+        else:
+            users_info.append(self.vk.get_info(users))
 
-        data = [Counter(self.cities), Counter(self.schools), Counter(self.univers)]
+        for user in users_info:
+            for i in user:
+                self.cities_handler(i)
+
+        data = [Counter(self.cities), Counter(self.schools), Counter(self.high_schools)]
 
         self.post_handler(data)
         out = self.reply_contruct()
         self.save(out)
 
-        StaticData.log.log(text='\n', type_s='print')
-        StaticData.log.log(text='User with ID {} handled.'.format(self.user_id), type_s='success')
+        LogWork.success(f'User with ID {self.user_id} handled')
         print(''.join(out))

@@ -1,7 +1,9 @@
+import re
+
 import vk_api
 
 from Config import Config
-from source.static.StaticData import StaticData
+from source.logger.LogWork import LogWork
 
 
 class UserAPI:
@@ -15,7 +17,7 @@ class UserAPI:
         try:
             return vk_api.VkApi(token=self.token)
         except:
-            StaticData.log.log(text='Bad access token.', type_s='error')
+            LogWork.fatal(text='Bad basic access token.')
             exit()
 
     def get_friends(self):
@@ -24,13 +26,14 @@ class UserAPI:
         except:
             return False
 
-    def get_info(self, user_id):
-        return self.vk.method('users.get', {'user_ids': user_id, 'fields': 'city,schools,education'})
+    def get_info(self, user_ids):
+        return self.vk.method('users.get', {'user_ids': ','.join("{0}".format(n) for n in user_ids),
+                                            'fields': 'city,schools,education'})
 
     @staticmethod
     def get_id_from_url(url):
         try:
-            url = url.replace("https://vk.com/", "").replace("/", "")
+            url = re.sub(r"(https://)?vk.com/", '', url).replace('/', '')
             vk = vk_api.VkApi(token=Config.user_vk_access_token)
             return vk.method("users.get", {"user_ids": url})[0]['id']
         except:
