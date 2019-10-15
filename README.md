@@ -6,7 +6,7 @@
 [![license][license-badge]][license-link]
 
 
-[GPL] - Get Primary Location. Script, which helps to locate VK user using his friends.
+[GPL] - Get Primary Location. Script, which let to locate VK user using his friends.
 
 **Check wiki before using.**
 
