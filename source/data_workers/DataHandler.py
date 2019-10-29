@@ -96,26 +96,56 @@ class DataHandler:
                 current = ["University", self.high_schools]
             try:
                 repl.append('\n{}:\n{}\n{}\n{}\n'.format(current[0],
-                                                         '1. {}: {} ({}/{})'.format(self.repl[i][0].replace('\'', ''),
+                                                         '1. {}: {} ({}/{})'.format(self.repl[i][0].replace('\'', '') if
+                                                                                    self.repl[
+                                                                                        i] != 'Не найдено' else 'Не найдено',
                                                                                     StaticMethods.get_percentage(
-                                                                                        self.repl[i][1],
-                                                                                        str(len(current[1])), 3),
-                                                                                    self.repl[i][1].strip(),
-                                                                                    str(len(current[1])), 3),
+                                                                                        self.repl[i][1] if self.repl[
+                                                                                                               i] != 'Не найдено' else '0',
+                                                                                        str(len(current[1])) if
+                                                                                        self.repl[
+                                                                                            i] != 'Не найдено' else '0',
+                                                                                        3),
+                                                                                    self.repl[i][1].strip() if
+                                                                                    self.repl[
+                                                                                        i] != 'Не найдено' else '0',
+                                                                                    str(len(current[1])) if self.repl[
+                                                                                                                i] != 'Не найдено' else '0',
+                                                                                    3),
                                                          '2. {}: {} ({}/{})'.format(
-                                                             self.repl[i + 1][0].replace('\'', ''),
+                                                             self.repl[i + 1][0].replace('\'', '') if
+                                                             self.repl[
+                                                                 i + 1] != 'Не найдено' else 'Не найдено',
                                                              StaticMethods.get_percentage(
-                                                                 self.repl[i + 1][1],
-                                                                 str(len(current[1])), 3),
-                                                             self.repl[i + 1][1].strip(),
-                                                             str(len(current[1]))),
+                                                                 self.repl[i + 1][1] if
+                                                                 self.repl[
+                                                                     i + 1] != 'Не найдено' else '0',
+                                                                 str(len(current[1])) if
+                                                                 self.repl[
+                                                                     i + 1] != 'Не найдено' else '0', 3),
+                                                             self.repl[i + 1][1].strip() if
+                                                             self.repl[
+                                                                 i + 1] != 'Не найдено' else '0',
+                                                             str(len(current[1])) if
+                                                             self.repl[
+                                                                 i + 1] != 'Не найдено' else '0'),
                                                          '3. {}: {} ({}/{})'.format(
-                                                             self.repl[i + 2][0].replace('\'', ''),
+                                                             self.repl[i + 2][0].replace('\'', '') if
+                                                             self.repl[
+                                                                 i + 2] != 'Не найдено' else 'Не найдено',
                                                              StaticMethods.get_percentage(
-                                                                 self.repl[i + 2][1],
-                                                                 str(len(current[1])), 3),
-                                                             self.repl[i + 2][1].strip(),
-                                                             str(len(current[1])))))
+                                                                 self.repl[i + 2][1] if
+                                                                 self.repl[
+                                                                     i + 2] != 'Не найдено' else '0',
+                                                                 str(len(current[1])) if
+                                                                 self.repl[
+                                                                     i + 2] != 'Не найдено' else '0', 3),
+                                                             self.repl[i + 2][1].strip() if
+                                                             self.repl[
+                                                                 i + 2] != 'Не найдено' else '0',
+                                                             str(len(current[1])) if
+                                                             self.repl[
+                                                                 i + 2] != 'Не найдено' else '0')))
             except:
                 return False
 
@@ -125,13 +155,10 @@ class DataHandler:
         users = self.vk.get_friends()
         LogWork.log("Got user's friends")
         users_info = []
-        if len(users) > 1000:
-            while len(users) > 0:
-                users_info.append(self.vk.get_info(users[:1000]))
-                del (users[:1000])
-                time.sleep(0.4)
-        else:
-            users_info.append(self.vk.get_info(users))
+        while len(users) > 0:
+            users_info.append(self.vk.get_info(users[:1000]))
+            del (users[:1000])
+            time.sleep(0.4)
 
         for user in users_info:
             for i in user:
