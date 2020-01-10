@@ -1,4 +1,4 @@
 class StaticData:
     name = 'GPL'
     author = 'icYFTL'
-    version = '1.6.1'
+    version = '1.6.2'

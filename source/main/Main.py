@@ -9,8 +9,8 @@ class Main:
     @staticmethod
     def init(user_id=None):
         if DataChecker.check() or not DataChecker.path_checker():
-            LogWork.fatal('Bad args or path creating trouble')
-            exit()
+            LogWork.fatal('Error in "Config.py" or path creating trouble')
+            raise SystemExit(-1)
         counter = 1
         LogWork.log('Work started')
         if not user_id:
@@ -19,7 +19,7 @@ class Main:
         for user in user_id:
             if not user:
                 LogWork.fatal("Bad ID")
-                exit()
+                raise SystemExit(-1)
             LogWork.log(f'User with ID {user} is handling now. ({counter}/{len(user_id)})')
             DH = DataHandler(user)
             DH.handler()
