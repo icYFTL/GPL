@@ -1,9 +1,11 @@
-from threading import Thread
+from core import config
 
-from source.console.Preview import Preview
-from source.main.Main import Main
+if config['server_mode']:
+    from source.server.server import app
+    app.run(host=config['web_server_host'],
+            port=int(config['web_server_port']),
+            debug=False)
+else:
+    from source.main.main import Main
+    Main().run()
 
-Preview.preview()
-
-MT = Thread(target=Main.init)
-MT.start()

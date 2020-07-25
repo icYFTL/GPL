@@ -12,8 +12,8 @@ class StaticMethods:
             return '0%'
 
     @staticmethod
-    def to_fixed(numObj, digits=0):
-        return f"{numObj:.{digits}f}"
+    def to_fixed(num, digits=0):
+        return f"{num:.{digits}f}"
 
     @staticmethod
     def get_time():

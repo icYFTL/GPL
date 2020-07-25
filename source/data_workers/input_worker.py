@@ -1,9 +1,8 @@
 import os
 import re
-
 import hues
 
-from source.vk_api.UserAPI import UserAPI
+from source.vk_api.user_api import UserAPI
 
 
 class InputWorker:

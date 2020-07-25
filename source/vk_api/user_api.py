@@ -1,29 +1,33 @@
 import re
-
+import logging
 import vk_api
 
-from Config import Config
-from source.logger.LogWork import LogWork
+from core import config
 
 
 class UserAPI:
-
-    def __init__(self, user_id):
-        self.token = Config.user_vk_access_token
+    def __init__(self, user_id, token=None):
         self.user_id = user_id
-        self.vk = self.get_session()
+        self.token = token or config["user_vk_access_token"]
+
+        session = self.get_session()
+        if not session:
+            raise SystemError("Bad access token")
+
+        self.vk = session
+        self.logger = logging.getLogger("UserAPI")
 
     def get_session(self):
         try:
             return vk_api.VkApi(token=self.token)
         except:
-            LogWork.fatal(text='Bad basic access token.')
-            exit()
+            self.logger.fatal('Bad access token.')
+            return False
 
     def get_friends(self):
         try:
             return self.vk.method('friends.get', {'user_id': self.user_id}).get('items')
-        except:
+        except Exception as e:
             return False
 
     def get_info(self, user_ids):
@@ -34,7 +38,7 @@ class UserAPI:
     def get_id_from_url(url):
         try:
             url = re.sub(r"(https://)?vk.com/", '', url).replace('/', '')
-            vk = vk_api.VkApi(token=Config.user_vk_access_token)
+            vk = vk_api.VkApi(token=config["user_vk_access_token"])
             return vk.method("users.get", {"user_ids": url})[0]['id']
-        except:
+        except Exception as e:
             return False

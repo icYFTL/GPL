@@ -1,0 +1,8 @@
+{
+  "user_vk_access_token": "",
+  "save_results": true,
+
+  "server_mode": false,
+  "web_server_host": "0.0.0.0",
+  "web_server_port": "7865"
+}

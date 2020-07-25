@@ -2,24 +2,26 @@ import operator
 import os
 import time
 from collections import Counter
+import logging
+import hues
 
-from Config import Config
-from source.logger.LogWork import LogWork
-from source.static.StaticMethods import StaticMethods
-from source.vk_api.UserAPI import UserAPI
+from core import config
+from source.static.static_methods import StaticMethods
+from source.vk_api.user_api import UserAPI
 
 
 class DataHandler:
-    def __init__(self, user_id):
+    def __init__(self, user_id, token=None):
         self.user_id = user_id
-        self.vk = UserAPI(user_id=self.user_id)
+        self.vk = UserAPI(user_id=self.user_id, token=token)
         self.cities = []
         self.schools = []
         self.high_schools = []
         self.repl = []
+        self.logger = logging.getLogger('DataHandler')
 
     def save(self, data):
-        if not Config.save_results:
+        if not config['save_results']:
             return
         try:
             os.mkdir("./stdout/")
@@ -153,7 +155,7 @@ class DataHandler:
 
     def handler(self):
         users = self.vk.get_friends()
-        LogWork.log("Got user's friends")
+        self.logger.info("Got user's friends")
         users_info = []
         while len(users) > 0:
             users_info.append(self.vk.get_info(users[:1000]))
@@ -170,5 +172,9 @@ class DataHandler:
         out = self.reply_contruct()
         self.save(out)
 
-        LogWork.success(f'User with ID {self.user_id} handled')
-        print(''.join(out))
+        self.logger.info(f'User with ID {self.user_id} handled')
+        if not config['server_mode']:
+            hues.success(''.join(out))
+        else:
+            return ''.join(out)
+
